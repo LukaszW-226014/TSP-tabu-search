@@ -1,3 +1,4 @@
+import java.util.Random;
 
 public class TabuSearch {
 
@@ -30,13 +31,28 @@ public class TabuSearch {
     }
 
     private void setupCurrentSolution() {
-//        currSolution = new int[problemSize + 1];
-//        for (int i = 0; i < problemSize; i++)
-//            currSolution[i] = i;
-//        currSolution[problemSize] = 0;
+        // wypelnienie obecnego rozwiazania 0,1,2,...
         currSolution = new int[problemSize + 1];
         for (int i = 0; i < problemSize; i++)
             currSolution[i] = i;
+        currSolution[problemSize] = 0;
+        // ustalenie nowego losowego rozwiazania
+        Random r = new Random();
+        for(int k = problemSize-1, j, buf; k > 1; k--)
+        {
+                j = r.nextInt(k);
+                System.out.println("j=" + j);
+                buf = currSolution[k];
+                currSolution[k] = currSolution[j];
+                currSolution[j] = buf;
+                System.out.println(k);
+        }
+        for (int m = 0; m < problemSize; m++){
+            if (currSolution[m] == 0){
+                currSolution[m] = currSolution[0];
+            }
+        }
+        currSolution[0] = 0;
         currSolution[problemSize] = 0;
     }
 
