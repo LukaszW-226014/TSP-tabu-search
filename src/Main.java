@@ -89,10 +89,11 @@ public class Main {
             Matrix matrix = new Matrix(n);
             //matrix.printMatrix();
             TabuSearch tabuSearch = new TabuSearch(matrix);
-            Long start = System.currentTimeMillis();
+            //Long start = System.currentTimeMillis();
             tabuSearch.invoke();
-            Long stop = System.currentTimeMillis() - start;
-            System.out.println(String.format("czas: %d ",stop));
+            //Long stop = System.currentTimeMillis() - start;
+            // System.out.println(String.format("czas: %d ",stop));
+            //tabuSearch.tabuAlghoritm(17, 4);
         }
         catch (FileNotFoundException e){
             System.out.println("Nie wybrales pliku");

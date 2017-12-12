@@ -23,4 +23,14 @@ public class TabuList {
         }
     }
 
+    public void printTabu(){
+        for(int i = 0; i < tabuList.length; i++){
+            for(int j = 0; j<tabuList.length; j++){
+                System.out.print(tabuList[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
 }

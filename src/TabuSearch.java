@@ -1,9 +1,14 @@
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 public class TabuSearch {
 
     private TabuList tabuList;
     private final Matrix matrix;
+    private int [][] matrix2;
 
     int[] currSolution;
     int numberOfIterations;
@@ -11,12 +16,12 @@ public class TabuSearch {
 
     private int[] bestSolution;
     private int bestCost;
+    private int lossCounter = 0;
 
     public TabuSearch(Matrix matrix) {
         this.matrix = matrix;
         problemSize = matrix.getEdgeCount();
-        numberOfIterations = problemSize * 10000;
-
+        numberOfIterations = 100000;
         tabuList = new TabuList(problemSize);
         setupCurrentSolution();
         setupBestSolution();
@@ -41,11 +46,9 @@ public class TabuSearch {
         for(int k = problemSize-1, j, buf; k > 1; k--)
         {
                 j = r.nextInt(k);
-                System.out.println("j=" + j);
                 buf = currSolution[k];
                 currSolution[k] = currSolution[j];
                 currSolution[j] = buf;
-                System.out.println(k);
         }
         for (int m = 0; m < problemSize; m++){
             if (currSolution[m] == 0){
@@ -66,21 +69,48 @@ public class TabuSearch {
 
     public void invoke() {
 
-        for (int i = 0; i < numberOfIterations; i++) {
+        //for (int i = 0; i < numberOfIterations; i++) {
+        Timer timer = new Timer();
+        timer.start();
+        long timeEnd = 60000000000L;
+        while (timer.getElapsedTime() < timeEnd){
+            // Dywersyfikacja
+            if (lossCounter > 150){
+                //System.out.println("DYWERSYFIKACJA");
+                setupCurrentSolution();
+                int currCost = matrix.calculateDistance(currSolution);
+                //System.out.print("chujowe koszt = " + currCost + "\n");
+                //printSolution(currSolution);
+                lossCounter = 0;
+            }
             int city1 = 0;
             int city2 = 0;
-
+            int currCostLocal = matrix.calculateDistance(currSolution);
+            //System.out.println("lokalny koszt = " + currCostLocal);
+            //System.out.println("globalny koszt = " + bestCost);
+            if (currCostLocal < bestCost){
+                System.arraycopy(currSolution, 0, bestSolution, 0, bestSolution.length);
+                bestCost = currCostLocal;
+            }
             for (int j = 1; j < currSolution.length - 1; j++) {
                 for (int k = 2; k < currSolution.length - 1; k++) {
                     if (j != k) {
                         swap(j, k);
                         int currCost = matrix.calculateDistance(currSolution);
-                        if ((currCost < bestCost) && tabuList.tabuList[j][k] == 0) {
-                            city1 = j;
-                            city2 = k;
-                            System.arraycopy(currSolution, 0, bestSolution, 0, bestSolution.length);
-                            bestCost = currCost;
+                        //System.out.println("loklany koszt po swap = " + currCost);
+                        if (currCost < currCostLocal){
+                            currCostLocal = currCost;
+                            if ((currCost < bestCost) && tabuList.tabuList[j][k] == 0) {
+                                city1 = j;
+                                city2 = k;
+                                System.arraycopy(currSolution, 0, bestSolution, 0, bestSolution.length);
+                                bestCost = currCost;
+                            }
+                        }else {
+                            lossCounter++;
+                            swap(k, j);
                         }
+
                     }
                 }
             }
@@ -90,9 +120,12 @@ public class TabuSearch {
                 tabuList.decrementTabu();
                 tabuList.tabuMove(city1, city2);
             }
+            //tabuList.printTabu();
+            //System.out.println("1. Local Best Solution cost found = " + bestCost + "\nBest Solution :");
+            //printSolution(bestSolution);
         }
 
-        System.out.println("Search done! \nBest Solution cost found = " + bestCost + "\nBest Solution :");
+        System.out.println("2. Search done! \nBest Solution cost found = " + bestCost + "\nBest Solution :");
         printSolution(bestSolution);
     }
 
