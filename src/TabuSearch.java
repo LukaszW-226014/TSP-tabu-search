@@ -8,7 +8,6 @@ public class TabuSearch {
 
     private TabuList tabuList;
     private final Matrix matrix;
-    private int [][] matrix2;
 
     int[] currSolution;
     int numberOfIterations;
@@ -72,14 +71,14 @@ public class TabuSearch {
         //for (int i = 0; i < numberOfIterations; i++) {
         Timer timer = new Timer();
         timer.start();
-        long timeEnd = 60000000000L;
+        long timeEnd = 250000000000L; // 60000000000 = 60 sec
         while (timer.getElapsedTime() < timeEnd){
             // Dywersyfikacja
             if (lossCounter > 150){
                 //System.out.println("DYWERSYFIKACJA");
                 setupCurrentSolution();
                 int currCost = matrix.calculateDistance(currSolution);
-                //System.out.print("chujowe koszt = " + currCost + "\n");
+                //System.out.print("chu koszt = " + currCost + "\n");
                 //printSolution(currSolution);
                 lossCounter = 0;
             }
@@ -100,11 +99,12 @@ public class TabuSearch {
                         //System.out.println("loklany koszt po swap = " + currCost);
                         if (currCost < currCostLocal){
                             currCostLocal = currCost;
-                            if ((currCost < bestCost) && tabuList.tabuList[j][k] == 0) {
+                            if ((currCost < bestCost) && tabuList.tabuList[j][k] == 0 || currCost < 0.95*bestCost) {
                                 city1 = j;
                                 city2 = k;
                                 System.arraycopy(currSolution, 0, bestSolution, 0, bestSolution.length);
                                 bestCost = currCost;
+                                System.out.println((float)timer.getElapsedTime()/600000000L + " \t\t" + bestCost);
                             }
                         }else {
                             lossCounter++;

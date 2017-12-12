@@ -90,9 +90,12 @@ public class Main {
             //matrix.printMatrix();
             TabuSearch tabuSearch = new TabuSearch(matrix);
             //Long start = System.currentTimeMillis();
+            Timer timer = new Timer();
+            timer.start();
             tabuSearch.invoke();
             //Long stop = System.currentTimeMillis() - start;
             // System.out.println(String.format("czas: %d ",stop));
+            System.out.println("Czas = " + timer.getElapsedTime() + "sec");
             //tabuSearch.tabuAlghoritm(17, 4);
         }
         catch (FileNotFoundException e){
