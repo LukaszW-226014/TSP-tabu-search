@@ -24,8 +24,6 @@ public class TabuSearch {
         tabuList = new TabuList(problemSize);
         setupCurrentSolution();
         setupBestSolution();
-
-
     }
 
     private void setupBestSolution() {
@@ -66,20 +64,17 @@ public class TabuSearch {
         System.out.println();
     }
 
-    public void invoke() {
-
+    public void search() {
+        int iterator = 0;
         //for (int i = 0; i < numberOfIterations; i++) {
         Timer timer = new Timer();
         timer.start();
-        long timeEnd = 250000000000L; // 60000000000 = 60 sec
+        long timeEnd = 300000000000L; // 60000000000 = 60 sec
         while (timer.getElapsedTime() < timeEnd){
             // Dywersyfikacja
-            if (lossCounter > 150){
+            if (lossCounter > 100){
                 //System.out.println("DYWERSYFIKACJA");
                 setupCurrentSolution();
-                int currCost = matrix.calculateDistance(currSolution);
-                //System.out.print("chu koszt = " + currCost + "\n");
-                //printSolution(currSolution);
                 lossCounter = 0;
             }
             int city1 = 0;
@@ -104,28 +99,25 @@ public class TabuSearch {
                                 city2 = k;
                                 System.arraycopy(currSolution, 0, bestSolution, 0, bestSolution.length);
                                 bestCost = currCost;
-                                System.out.println((float)timer.getElapsedTime()/600000000L + " \t\t" + bestCost);
+                                System.out.println("Iteracja nr = " + iterator + "\t\t\t" +(float)timer.getElapsedTime()/600000000L + "\t\t\t" + bestCost);
                             }
-                        }else {
+                        }
+                        else {
                             lossCounter++;
                             swap(k, j);
                         }
-
                     }
                 }
             }
 
-
             if (city1 != 0) {
                 tabuList.decrementTabu();
-                tabuList.tabuMove(city1, city2);
+                tabuList.tabuMove(city1, city2, problemSize/2);
             }
-            //tabuList.printTabu();
-            //System.out.println("1. Local Best Solution cost found = " + bestCost + "\nBest Solution :");
-            //printSolution(bestSolution);
+            iterator++;
         }
 
-        System.out.println("2. Search done! \nBest Solution cost found = " + bestCost + "\nBest Solution :");
+        System.out.println("\nNajlepsze rozwiazanie jakie znaleziono. \nIteracja nr = " + iterator + "\nKoszt = " + bestCost + "\nTrasa:");
         printSolution(bestSolution);
     }
 

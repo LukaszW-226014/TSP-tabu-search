@@ -6,14 +6,6 @@ public class Matrix {
 
     private int edgeCount;
 
-    public Matrix(int size) {
-       edgeCount = size;
-        matrix = new int[size][size];
-        generateMatrix(size);
-    }
-
-
-
     public Matrix(int[][] matrix) {
         edgeCount = matrix.length;
        this.matrix = matrix;
@@ -23,13 +15,9 @@ public class Matrix {
         return edgeCount;
     }
 
-
-
     public int getWeight(int from, int to) {
         return matrix[from][to];
     }
-
-
 
     public int[][] getMatrix() {
         return matrix;
@@ -48,7 +36,7 @@ public class Matrix {
         }
     }
 
-    //funkcja objektywna
+    //wyliczanie kosztu
     public int calculateDistance(int solution[]) {
         int cost = 0;
         for (int i = 0; i < solution.length - 1; i++) {
@@ -56,18 +44,4 @@ public class Matrix {
         }
         return cost;
     }
-
-    private void generateMatrix(int size) {
-        Random random = new Random();
-        for (int row = 0; row < size; row++) {
-            for (int col = 0; col < size; col++) {
-                if (row != col) {
-                    int value = random.nextInt(100) + 1;
-                    matrix[row][col] = value;
-                    matrix[col][row] = value;
-                }
-            }
-        }
-    }
-
 }
