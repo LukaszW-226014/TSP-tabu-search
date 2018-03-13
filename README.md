@@ -1,1 +1,1 @@
-Tabu search algorithm for Traveling salesman problem
+Tabu search algorithm for travelling salesman problem
