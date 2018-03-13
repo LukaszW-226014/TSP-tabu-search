@@ -1,1 +1,1 @@
-TSPv2
+Tabu search algorithm for Traveling salesman problem
